@@ -1,39 +1,55 @@
 #include <bits/stdc++.h>
 #define MAXn 1000000
-using namespace std;
-double *a = new double[MAXn];
 
-void qs(int L, int H)
+using namespace std;
+
+double *arr = new double[MAXn];
+
+void QuickSort(int Low, int High)
 {
-    int i = L, j = H; double x = a[(L+H)/2];
+    double index = arr[(Low + High) / 2];
     do
     {
-        while (a[i]<x) i++;
-        while (a[j]>x) j--;
-        if (i<=j)
-        {
-            double tam = a[i]; a[i] = a[j]; a[j] = tam;
-            i++; j--;
+        while (arr[Low] < index) {
+            Low++;
         }
-    } while (i<=j);
-    if (L<j) qs(L,j);
-    if (i<H) qs(i,H);
+        while (arr[High] > index) {
+            High--;
+        }
+        if (Low <= High)
+        {
+            swap(arr[Low], arr[High]);
+            Low++; 
+            High--;
+        }
+    } while (Low <= High);
+
+    if (Low < High) {
+        QuickSort(Low, High);
+    }
+    if (Low < High) {
+        QuickSort(Low, High);
+    }
 }
 
 int main()
 {
-    cout<<"[Quick Sort] \n";
-    string dau = "DATA", cuoi = ".TXT";
-    for (int k = 1; k <= 10; k++)
+    cout<<"Quick Sort: " << '\n';
+    string HEAD = "DATA";
+    string TAIL = ".TXT";
+    for (int k = 1; k <= 10; ++k)
     {
-        string giua = to_string(k), file = dau + giua + cuoi;
-        ifstream nhap(file);
-        for (int i = 0; i < MAXn; i++) nhap>>a[i];
+        string BODY = to_string(k);
+        string file = HEAD + BODY + TAIL;
+        ifstream Input(file);
+        for (int i = 0; i < MAXn; ++i) {
+            Input >> arr[i];
+        }
         clock_t start = clock();
-        qs(0,MAXn-1);
+        QuickSort(0, MAXn-1);
         clock_t end = clock();
         double time_elapsed = double(end - start);
-        cout << "DATA " << k << ": " << time_elapsed << " ms" << "\n";
+        cout << "Quick " << k << " : " << time_elapsed << " ms" << "\n";
     }
     return 0;
 }
