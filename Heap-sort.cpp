@@ -1,44 +1,67 @@
 #include <bits/stdc++.h>
 #define MAXn 1000000
-using namespace std;
-double *a = new double[MAXn];
 
-void sw(double &x, double &y)
+using namespace std;
+
+double *arr = new double[MAXn];
+
+void ChangeSit(double &x, double &y)
 {
-    double tam = x; x = y; y = tam;
+    swap(x, y);
 }
-void taoheap(int N, int i)
+
+void CreateHeap(int N, int i)
 {
-	int largest = i, l = 2 * i + 1, r = 2 * i + 2;
-	if (l < N && a[l] > a[largest]) largest = l;
-	if (r < N && a[r] > a[largest]) largest = r;
-	if (largest != i)
-    {
-		sw(a[i], a[largest]); taoheap(N, largest);
+	int imp = i; 
+    int left = 2 * i + 1; 
+    int right = 2 * i + 2;
+	if (left < N && arr[left] > arr[imp]) {
+        imp = left;
+    }
+
+	if (right < N && arr[right] > arr[imp]) {
+        imp = right;
+    }
+
+	if (imp != i) {
+		ChangeSit(arr[i], arr[imp]); 
+        CreateHeap(N, imp);
 	}
 }
+
 void heapSort(int N)
 {
-	for (int i = N / 2 - 1; i >= 0; i--) taoheap(N, i);
-	for (int i = N - 1; i > 0; i--)
-    {
-		sw(a[0], a[i]); taoheap(i, 0);
+	for (int i = N / 2 - 1; i >= 0; --i) {
+        CreateHeap(N, i);
+    }
+
+	for (int i = N - 1; i > 0; --i) {
+		ChangeSit(arr[0], arr[i]); 
+        CreateHeap(i, 0);
 	}
 }
+
 int main()
 {
-	cout<<"[Heap Sort] \n";
-    string dau = "DATA", cuoi = ".TXT";
-    for (int k = 1; k <= 10; k++)
+	cout<<"Heap Sort: " << '\n';
+    string HEAD = "DATA";
+    string TAIL = ".TXT";
+    for (int k = 1; k <= 10; ++k)
     {
-        string giua = to_string(k), file = dau + giua + cuoi;
-        ifstream nhap(file);
-        for (int i = 0; i < MAXn; i++) nhap>>a[i];
+        string BODY = to_string(k);
+        string file = HEAD + BODY + TAIL;
+        ifstream Input(file);
+
+        for (int i = 0; i < MAXn; ++i) {
+            Input >> arr[i];
+        }
+
         clock_t start = clock();
         heapSort(MAXn);
         clock_t end = clock();
         double time_elapsed = double(end - start);
-        cout << "DATA " << k << ": " << time_elapsed << " ms" << "\n";
+        cout << "Heap " << k << " : " << time_elapsed << " ms" << "\n";
     }
 
+    return 0;
 }
